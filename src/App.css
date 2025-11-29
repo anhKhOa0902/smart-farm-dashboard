@@ -1,38 +1,915 @@
-.App {
+/* ===== THEME VARIABLES ===== */
+:root {
+  --bg: #0f172a;
+  --bg-card: #020617;
+  --bg-elevated: #020617;
+  --border-subtle: #1f2937;
+  --text: #e5e7eb;
+  --text-muted: #9ca3af;
+  --accent: #3b82f6;
+  --accent-soft: rgba(59, 130, 246, 0.15);
+  --success: #4ade80;
+  --error: #f97373;
+  --shadow-strong: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --navbar-bg: rgba(15, 23, 42, 0.9);
+}
+
+[data-theme="light"] {
+  --bg: #f3f4f6;
+  --bg-card: #ffffff;
+  --bg-elevated: #ffffff;
+  --border-subtle: #e5e7eb;
+  --text: #111827;
+  --text-muted: #6b7280;
+  --accent: #2563eb;
+  --accent-soft: rgba(37, 99, 235, 0.12);
+  --success: #16a34a;
+  --error: #dc2626;
+  --shadow-strong: 0 16px 40px rgba(148, 163, 184, 0.35);
+  --navbar-bg: rgba(249, 250, 251, 0.9);
+}
+
+/* ===== GLOBAL ===== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: radial-gradient(circle at top, #1f2937 0, var(--bg) 40%);
+  color: var(--text);
+}
+
+.app {
+  min-height: 100vh;
+}
+
+/* ===== NAVBAR ===== */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 22px;
+  background: var(--navbar-bg);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-logo {
+  font-weight: 700;
+  font-size: 18px;
+  padding-right: 14px;
+  border-right: 1px solid var(--border-subtle);
+  margin-right: 6px;
+}
+
+.navbar-link {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.navbar-link:hover {
+  background: var(--accent-soft);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.navbar-link.active {
+  background: var(--accent);
+  color: white;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-switch-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-switch-label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* Switch container */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+}
+
+/* Hide default checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #4b5563;
+  transition: 0.2s;
+  border-radius: 999px;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.2s;
+  border-radius: 50%;
+}
+
+/* Checked */
+.switch input:checked + .slider {
+  background-color: var(--accent);
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(22px);
+}
+
+/* Round version */
+.slider.round {
+  border-radius: 999px;
+}
+
+.slider.round::before {
+  border-radius: 50%;
+}
+
+/* Đặt style thêm cho row theme trong Settings (cho đẹp) */
+.settings-theme-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* ===== DASHBOARD ===== */
+
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+}
+
+.dashboard > h1 {
   text-align: center;
+  margin: 18px 0 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.column {
+  background: var(--bg-elevated);
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow-strong);
+  border: 1px solid var(--border-subtle);
+}
+
+.cards {
+  display: grid;
+  gap: 10px;
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-subtle);
+}
+
+.card-label {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.card-value {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toggle-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+}
+
+.toggle-btn.on {
+  background: var(--success);
+  color: #022c22;
+  box-shadow: 0 0 0 1px rgba(22, 163, 74, 0.75);
+}
+
+.toggle-btn.off {
+  background: var(--bg-card);
+  color: var(--text);
+  box-shadow: 0 0 0 1px var(--border-subtle);
+}
+
+.toggle-btn:hover {
+  transform: translateY(-1px);
+}
+
+.schedule-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.schedule-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.schedule-form input[type="datetime-local"],
+.schedule-form input[type="number"] {
+  margin-top: 4px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  color: var(--text);
+}
+
+.schedule-form button {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-bar {
+  max-width: 1200px;
+  margin: 10px auto 0;
+  padding: 0 20px 24px;
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.status-bar .error {
+  color: var(--error);
+}
+
+.status-bar .success {
+  color: var(--success);
+}
+
+/* ===== SETTINGS PAGE ===== */
+
+.settings-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+}
+
+.settings-page h1 {
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+.settings-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
+}
+
+@media (max-width: 900px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.settings-section {
+  background: var(--bg-elevated);
+  border-radius: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-strong);
+}
+
+.settings-section h2 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.settings-note {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.settings-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.settings-form input[type="number"] {
+  margin-top: 4px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  color: var(--text);
+}
+
+.settings-save-btn {
+  align-self: flex-start;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.settings-success {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--success);
+}
+/* ===== STATS PAGE (THỐNG KÊ) ===== */
+
+.stats-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+}
+
+.stats-page h1 {
+  margin-bottom: 6px;
+}
+
+.stats-subtitle {
+  margin-top: 0;
+  margin-bottom: 18px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.stats-status {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.stats-status.error {
+  color: var(--error);
+}
+
+/* ===== STATS PAGE (THỐNG KÊ) ===== */
+
+.stats-page {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+}
+
+.stats-page h1 {
+  margin-bottom: 6px;
+}
+
+.stats-subtitle {
+  margin-top: 0;
+  margin-bottom: 18px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.stats-status {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.stats-status.error {
+  color: var(--error);
+}
+
+/* Mặc định: laptop trở lên -> 2 biểu đồ mỗi hàng */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+/* Tablet (<= 900px): 1 biểu đồ mỗi hàng */
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Biểu đồ lớn hơn */
+.chart-card {
+  background: var(--bg-elevated);
+  border-radius: 16px;
+  padding: 14px 16px 12px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-strong);
+  min-height: 340px; /* ⭐ tăng chiều cao */
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card h2 {
+  font-size: 17px; /* ⭐ to hơn */
+  margin: 0 0 12px;
+}
+
+/* tăng vùng hiển thị chart */
+.chart-wrapper {
+  flex: 1;
+  min-height: 260px; /* ⭐ tăng chiều cao chart */
+}
+
+
+.chart-card h2 {
+  font-size: 15px;
+  margin: 0 0 8px;
+}
+
+.chart-wrapper {
+  flex: 1;
+  min-height: 170px;
+}
+/* statistics.css */
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chart-row {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.chart-column {
+  width: 45%;
+}
+
+.chart {
+  margin: 10px;
+}
+
+.chart h3 {
+  text-align: center;
+}
+/* Thêm vào file App.css hiện có */
+
+/* ===== Statistics Page ===== */
+.statistics-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.statistics-container h2 {
+  margin-bottom: 2rem;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.chart-wrapper {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chart-wrapper h3 {
+  margin: 0 0 1rem 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.chart {
+  height: 300px;
+  position: relative;
+}
+
+/* Loading & Error States */
+.loading-screen,
+.error-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.error-screen {
+  color: #dc3545;
+}
+
+/* ===== Dashboard Loading State ===== */
+.card .loading {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 1200px) {
+  .chart-grid {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .chart-wrapper {
+    padding: 1rem;
+  }
+  
+  .chart {
+    height: 250px;
+  }
+  
+  .statistics-container {
+    padding: 1rem;
+  }
+}
+
+/* ===== Theme Variables (nếu chưa có) ===== */
+[data-theme="dark"] {
+  --card-bg: #2d3748;
+  --text-primary: #f7fafc;
+  --text-secondary: #a0aec0;
+}
+
+[data-theme="light"] {
+  --card-bg: #ffffff;
+  --text-primary: #1a202c;
+  --text-secondary: #718096;
+}
+
+.last-update {
+  text-align: center;
+  padding: 10px;
+  background: var(--card-bg);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.card .loading {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+/* Thêm vào cuối file App.css hiện tại */
+
+/* ========================================
+   NOTIFICATION SYSTEM
+======================================== */
+
+/* Notification Bell */
+.notification-bell {
+  position: relative;
+  cursor: pointer;
+  padding: 8px 12px;
+  margin-right: 16px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.notification-bell:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.bell-icon {
+  font-size: 20px;
+  display: inline-block;
+  animation: ring 2s ease-in-out infinite;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #f44336;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes ring {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  10%, 30% {
+    transform: rotate(-10deg);
+  }
+  20%, 40% {
+    transform: rotate(10deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Notification Panel */
+.notification-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  animation: fadeIn 0.2s ease;
+}
+
+.notification-panel {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  width: 400px;
+  max-height: 600px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Notification Header */
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.notification-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background: var(--border-color);
+  color: var(--text-primary);
+}
+
+/* Notification Body */
+.notification-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.no-alerts {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 60px 20px;
+  text-align: center;
 }
 
-.App-link {
-  color: #61dafb;
+.no-alerts-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.no-alerts p {
+  color: var(--text-secondary);
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Alerts List */
+.alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.alert-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-color);
+  border-radius: 8px;
+  border-left: 4px solid #757575;
+  transition: all 0.2s;
+}
+
+.alert-item:hover {
+  transform: translateX(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.alert-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.alert-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.alert-message {
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.alert-time {
+  color: var(--text-tertiary);
+  font-size: 12px;
+}
+
+/* Scrollbar for notification panel */
+.notification-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notification-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notification-body::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.notification-body::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .notification-panel {
+    width: calc(100% - 40px);
+    right: 20px;
+    left: 20px;
+    max-height: 70vh;
   }
-  to {
-    transform: rotate(360deg);
+
+  .notification-bell {
+    margin-right: 8px;
   }
+}
+
+/* Dark theme adjustments */
+[data-theme="dark"] .notification-panel {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .alert-item {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Light theme adjustments */
+[data-theme="light"] .notification-bell:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .alert-item {
+  background: rgba(0, 0, 0, 0.02);
 }
